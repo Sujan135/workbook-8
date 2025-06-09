@@ -6,9 +6,10 @@ public class App {
         String url = "jdbc:mysql://localhost:3306/northwind";
         String username = "root";
         String password = "Nepal135!";
-        String query = "SELECT ProductName FROM products";
+        String query = "SELECT ProductID, ProductName, UnitPrice, UnitsInStock FROM products";
 
         try {
+
             Connection connection = DriverManager.getConnection(url,username,password);
 
             Statement statement = connection.createStatement();
@@ -16,8 +17,17 @@ public class App {
             ResultSet resultSet=  statement.executeQuery(query);
 
             while (resultSet.next()) {
+                int id = resultSet.getInt("ProductID");
                 String name = resultSet.getString("ProductName");
-                System.out.println(name);
+                double price = resultSet.getDouble("UnitPrice");
+                int stock = resultSet.getInt("UnitsInStock");
+
+
+                System.out.println("Product Id: " + id);
+                System.out.println("Name: " + name);
+                System.out.println("Price: " + price);
+                System.out.println("Stock: " + stock);
+                System.out.println("--------------------");
             }
 
         } catch (SQLException e) {
