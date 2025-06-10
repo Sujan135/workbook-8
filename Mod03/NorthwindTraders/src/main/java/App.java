@@ -1,20 +1,52 @@
 import java.sql.*;
+import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) throws ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("What do you want to do?");
+            System.out.println("1) Display all products");
+            System.out.println("2) Display all customers");
+            System.out.println("0) Exit");
+            System.out.println("Select an option: ");
+            String option = scanner.nextLine();
+
+            switch (option) {
+                case "1":
+                    displayAllProducts();
+                    break;
+                case "2":
+                    break;
+                case "0":
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    break;
+                default:
+                    System.out.println("Invalid option. ");
+            }
+        }
+    }
+
+    private  static void displayAllProducts() {
+
         String url = "jdbc:mysql://localhost:3306/northwind";
         String username = "root";
         String password = "Nepal135!";
         String query = "SELECT ProductID, ProductName, UnitPrice, UnitsInStock FROM products";
 
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
         try {
-
-            Connection connection = DriverManager.getConnection(url,username,password);
-
-            Statement statement = connection.createStatement();
-
-            ResultSet resultSet=  statement.executeQuery(query);
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(url,username,password);
+            statement = connection.createStatement();
+            resultSet=  statement.executeQuery(query);
 
             while (resultSet.next()) {
                 int id = resultSet.getInt("ProductID");
@@ -30,9 +62,18 @@ public class App {
                 System.out.println("--------------------");
             }
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
     }
+
+
 }
