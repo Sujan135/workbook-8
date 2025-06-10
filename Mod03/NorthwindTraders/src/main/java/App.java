@@ -19,6 +19,7 @@ public class App {
                     displayAllProducts();
                     break;
                 case "2":
+                    displayAllCustomers();
                     break;
                 case "0":
                     System.out.println("Exiting...");
@@ -75,5 +76,51 @@ public class App {
         }
     }
 
+    private  static void displayAllCustomers() {
 
+        String url = "jdbc:mysql://localhost:3306/northwind";
+        String username = "root";
+        String password = "Nepal135!";
+        String query = "SELECT ContactName, CompanyName, City, Country, Phone" +
+                " FROM customers ORDER BY Country";
+
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(url,username,password);
+            statement = connection.createStatement();
+            resultSet=  statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                String contactName = resultSet.getString("ContactName");
+                String companyName = resultSet.getString("CompanyName");
+                String city = resultSet.getString("City");
+                String country = resultSet.getString("Country");
+                String phone = resultSet.getString("Phone");
+
+
+                System.out.println("Contact Name: " + contactName);
+                System.out.println("Company Name: " + companyName);
+                System.out.println("City: " + city);
+                System.out.println("Country: " + country);
+                System.out.println("Phone: " + phone);
+                System.out.println("--------------------");
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
