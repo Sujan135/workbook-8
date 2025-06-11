@@ -57,7 +57,6 @@ public class Main {
                     foundMovies = true;
                     System.out.println("Film: " + rs.getString("title"));
                 }
-
                 if (!foundMovies) {
                     System.out.println("No films found for actor: " + firstName + " " + lastName);
                 }
