@@ -38,4 +38,45 @@ public class DataManager {
             e.printStackTrace();
         }
     }
+
+    public void getSalesByYear(String year) {
+        String query = "{CALL `Sales by Year`(?)}";
+        try (Connection conn = dataSource.getConnection();
+             CallableStatement stmt = conn.prepareCall(query)) {
+
+            stmt.setString(1, year);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                System.out.printf("%s - %.2f\n",
+                        rs.getString("ShipperName"),
+                        rs.getDouble("TotalPurchase"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getSalesByCategory(int categoryId, String categoryName) {
+        String query = "{CALL SalesByCategory(?, ?)}";
+        try (Connection conn = dataSource.getConnection();
+             CallableStatement stmt = conn.prepareCall(query)) {
+
+            stmt.setInt(1, categoryId);
+            stmt.setString(2, categoryName);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                System.out.printf("%s - %s - %d\n",
+                        rs.getString("ProductName"),
+                        rs.getString("ProductDescription"),
+                        rs.getInt("TotalPurchase"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
