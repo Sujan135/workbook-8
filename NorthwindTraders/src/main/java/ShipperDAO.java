@@ -45,5 +45,16 @@ public class ShipperDAO {
         return shippers;
     }
 
+    public void updateShipperPhone(int shipperId, String newPhone) throws SQLException {
+        String sql = "UPDATE shippers SET Phone = ? WHERE ShipperID = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, newPhone);
+            preparedStatement.setInt(2, shipperId);
+            preparedStatement.executeUpdate();
+        }
+    }
+
 
 }
