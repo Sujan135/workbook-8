@@ -56,5 +56,13 @@ public class ShipperDAO {
         }
     }
 
+    public void deleteShipper(int shipperId) throws SQLException {
+        String sql = "DELETE FROM shippers WHERE ShipperID = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
+            preparedStatement.setInt(1, shipperId);
+            preparedStatement.executeUpdate();
+        }
+    }
 }
