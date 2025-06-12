@@ -9,11 +9,11 @@ public class DataManager {
     private DataSource dataSource;
 
     public DataManager() {
-        BasicDataSource ds = new BasicDataSource();
-        ds.setUrl("jdbc:mysql://localhost:3306/northwind");
-        ds.setUsername("root");
-        ds.setPassword("your_password");
-        this.dataSource = ds;
+        BasicDataSource dataSource1 = new BasicDataSource();
+        dataSource1.setUrl("jdbc:mysql://localhost:3306/northwind");
+        dataSource1.setUsername("root");
+        dataSource1.setPassword("Nepal135!");
+        this.dataSource = dataSource1;
     }
 
     public DataSource getDataSource() {
@@ -23,15 +23,15 @@ public class DataManager {
     public void getCustomerOrderHistory(String customerId) {
         String query = "{CALL CustOrderHist(?)}";
         try (Connection conn = dataSource.getConnection();
-             CallableStatement stmt = conn.prepareCall(query)) {
+             CallableStatement statement = conn.prepareCall(query)) {
 
-            stmt.setString(1, customerId);
-            ResultSet rs = stmt.executeQuery();
+            statement.setString(1, customerId);
+            ResultSet resultSet = statement.executeQuery();
 
-            while (rs.next()) {
+            while (resultSet.next()) {
                 System.out.printf("%s - %d\n",
-                        rs.getString("ProductName"),
-                        rs.getInt("TOTAL"));
+                        resultSet.getString("ProductName"),
+                        resultSet.getInt("TOTAL"));
             }
 
         } catch (SQLException e) {
@@ -41,16 +41,16 @@ public class DataManager {
 
     public void getSalesByYear(String year) {
         String query = "{CALL `Sales by Year`(?)}";
-        try (Connection conn = dataSource.getConnection();
-             CallableStatement stmt = conn.prepareCall(query)) {
+        try (Connection connection = dataSource.getConnection();
+             CallableStatement statement = connection.prepareCall(query)) {
 
-            stmt.setString(1, year);
-            ResultSet rs = stmt.executeQuery();
+            statement.setString(1, year);
+            ResultSet resultSet = statement.executeQuery();
 
-            while (rs.next()) {
+            while (resultSet.next()) {
                 System.out.printf("%s - %.2f\n",
-                        rs.getString("ShipperName"),
-                        rs.getDouble("TotalPurchase"));
+                        resultSet.getString("ShipperName"),
+                        resultSet.getDouble("TotalPurchase"));
             }
 
         } catch (SQLException e) {
@@ -60,18 +60,18 @@ public class DataManager {
 
     public void getSalesByCategory(int categoryId, String categoryName) {
         String query = "{CALL SalesByCategory(?, ?)}";
-        try (Connection conn = dataSource.getConnection();
-             CallableStatement stmt = conn.prepareCall(query)) {
+        try (Connection connection = dataSource.getConnection();
+             CallableStatement statement = connection.prepareCall(query)) {
 
-            stmt.setInt(1, categoryId);
-            stmt.setString(2, categoryName);
-            ResultSet rs = stmt.executeQuery();
+            statement.setInt(1, categoryId);
+            statement.setString(2, categoryName);
+            ResultSet resultSet = statement.executeQuery();
 
-            while (rs.next()) {
+            while (resultSet.next()) {
                 System.out.printf("%s - %s - %d\n",
-                        rs.getString("ProductName"),
-                        rs.getString("ProductDescription"),
-                        rs.getInt("TotalPurchase"));
+                        resultSet.getString("ProductName"),
+                        resultSet.getString("ProductDescription"),
+                        resultSet.getInt("TotalPurchase"));
             }
 
         } catch (SQLException e) {
