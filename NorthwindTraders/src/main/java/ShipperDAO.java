@@ -28,5 +28,22 @@ public class ShipperDAO {
         return -1;
     }
 
+    public List<Shipper> getAllShippers() throws SQLException {
+        List<Shipper> shippers = new ArrayList<>();
+        String sql = "SELECT * FROM shippers";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                shippers.add(new Shipper(
+                        resultSet.getInt("ShipperID"),
+                        resultSet.getString("CompanyName"),
+                        resultSet.getString("Phone")));
+            }
+        }
+        return shippers;
+    }
+
 
 }
